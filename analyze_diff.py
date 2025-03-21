@@ -59,7 +59,7 @@ def compare_companies(conn, last_run_id, prev_run_id, diff_dir, timestamp):
                                (merged['sector_last'] != merged['sector_prev'])]
     
     # Формируем отчет
-    with open(f"{diff_dir}/companies_diff_{timestamp}.txt", 'w', encoding='utf-8') as f:
+    with open(os.path.join(diff_dir, f"companies_diff_{timestamp}.txt"), 'w', encoding='utf-8') as f:
         f.write(f"Отчет по изменениям в компаниях между запусками {prev_run_id} и {last_run_id}\n")
         f.write("=" * 80 + "\n\n")
         
@@ -156,7 +156,7 @@ def compare_yearly_dividends(conn, last_run_id, prev_run_id, diff_dir, timestamp
     changed_dividends = pd.DataFrame(changed_rows)
     
     # Формируем отчет
-    with open(f"{diff_dir}/yearly_dividends_diff_{timestamp}.txt", 'w', encoding='utf-8') as f:
+    with open(os.path.join(diff_dir, f"yearly_dividends_diff_{timestamp}.txt"), 'w', encoding='utf-8') as f:
         f.write(f"Отчет по изменениям в годовых дивидендах между запусками {prev_run_id} и {last_run_id}\n")
         f.write("=" * 80 + "\n\n")
         
@@ -252,7 +252,7 @@ def compare_dividend_payments(conn, last_run_id, prev_run_id, diff_dir, timestam
     changed_payments = pd.DataFrame(changed_rows)
     
     # Формируем отчет
-    with open(f"{diff_dir}/dividend_payments_diff_{timestamp}.txt", 'w', encoding='utf-8') as f:
+    with open(os.path.join(diff_dir, f"dividend_payments_diff_{timestamp}.txt"), 'w', encoding='utf-8') as f:
         f.write(f"Отчет по изменениям в выплатах дивидендов между запусками {prev_run_id} и {last_run_id}\n")
         f.write("=" * 80 + "\n\n")
         
@@ -304,15 +304,15 @@ def create_summary_report(last_run_id, prev_run_id, diff_dir, timestamp,
     file_prefix = f"iter_{prev_run_id}_{last_run_id}_"
     
     # Пути к файлам
-    companies_file = f"{diff_dir}/{file_prefix}companies_diff_{timestamp}.txt"
-    yearly_dividends_file = f"{diff_dir}/{file_prefix}yearly_dividends_diff_{timestamp}.txt"
-    dividend_payments_file = f"{diff_dir}/{file_prefix}dividend_payments_diff_{timestamp}.txt"
-    summary_file = f"{diff_dir}/{file_prefix}summary_diff_{timestamp}.txt"
+    companies_file = os.path.join(diff_dir, f"{file_prefix}companies_diff_{timestamp}.txt")
+    yearly_dividends_file = os.path.join(diff_dir, f"{file_prefix}yearly_dividends_diff_{timestamp}.txt")
+    dividend_payments_file = os.path.join(diff_dir, f"{file_prefix}dividend_payments_diff_{timestamp}.txt")
+    summary_file = os.path.join(diff_dir, f"{file_prefix}summary_diff_{timestamp}.txt")
     
     # Переименовываем уже созданные файлы
-    os.rename(f"{diff_dir}/companies_diff_{timestamp}.txt", companies_file)
-    os.rename(f"{diff_dir}/yearly_dividends_diff_{timestamp}.txt", yearly_dividends_file)
-    os.rename(f"{diff_dir}/dividend_payments_diff_{timestamp}.txt", dividend_payments_file)
+    os.rename(os.path.join(diff_dir, f"companies_diff_{timestamp}.txt"), companies_file)
+    os.rename(os.path.join(diff_dir, f"yearly_dividends_diff_{timestamp}.txt"), yearly_dividends_file)
+    os.rename(os.path.join(diff_dir, f"dividend_payments_diff_{timestamp}.txt"), dividend_payments_file)
     
     # Распаковываем информацию о дивидендах
     if isinstance(dividend_differences, tuple) and len(dividend_differences) == 3:
